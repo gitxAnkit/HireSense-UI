@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+import Button from "../components/ui/Button";
+
 const LandingPage = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* Navbar */}
@@ -20,7 +24,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center px-6 text-center mt-20">
         <h2 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
-          Practice Interviews with an
+          Setup Interviews with an
           <span className="text-indigo-400"> AI-Powered Interviewer</span>
         </h2>
 
@@ -30,12 +34,12 @@ const LandingPage = () => {
         </p>
 
         <div className="mt-8 flex gap-4">
-          <button className="rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold hover:bg-indigo-500">
-            Start Mock Interview
-          </button>
-          <button className="rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold hover:bg-slate-800">
+          <Button onClick={() => navigate("/setInterview")}>
+            Setup Interview
+          </Button>
+          {/* <button className="rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold hover:bg-slate-800">
             View Demo
-          </button>
+          </button> */}
         </div>
       </section>
 
