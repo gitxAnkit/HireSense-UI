@@ -1,12 +1,10 @@
-import LandingPage from "./features/LandingPage";
-
+import Router from "./routes/Router";
 
 function App() {
   return (
     <>
-      <LandingPage />
+      <Router />
     </>
   );
 }
-
 export default App;
