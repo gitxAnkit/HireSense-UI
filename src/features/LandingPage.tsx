@@ -1,34 +1,37 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../components/ui/Button";
+import { Button } from "../components/ui/button";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-background-primary via-background-secondary to-background-primary text-text-primary">
       {/* Navbar */}
       <nav className="flex items-center justify-between px-8 py-5">
-        <h1 className="text-xl font-bold tracking-wide">Hire Sense AI </h1>
+        <h1 className="text-xl font-bold tracking-wide">Hire Sense AI</h1>
+
         <div className="space-x-4">
-          <button className="text-sm text-slate-300 hover:text-white">
+          <button className="text-sm text-text-muted hover:text-text-primary transition">
             Features
           </button>
-          <button className="text-sm text-slate-300 hover:text-white">
+          <button className="text-sm text-text-muted hover:text-text-primary transition">
             About
           </button>
-          <button className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium hover:bg-indigo-500">
+
+          <button className="rounded-md bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-hover transition">
             Get Started
           </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center px-6 text-center mt-20">
+      <section className="mt-20 flex flex-col items-center justify-center px-6 text-center">
         <h2 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
-          Setup Interviews with an
-          <span className="text-indigo-400"> AI-Powered Interviewer</span>
+          Setup Interviews with an{" "}
+          <span className="text-brand-primary">AI-Powered Interviewer</span>
         </h2>
 
-        <p className="mt-6 max-w-2xl text-slate-300">
+        <p className="mt-6 max-w-2xl text-text-secondary">
           Upload a job description, get role-specific interview questions,
           answer via voice or text, and receive instant AI feedback.
         </p>
@@ -37,9 +40,6 @@ const LandingPage = () => {
           <Button onClick={() => navigate("/setInterview")}>
             Setup Interview
           </Button>
-          {/* <button className="rounded-lg border border-slate-600 px-6 py-3 text-sm font-semibold hover:bg-slate-800">
-            View Demo
-          </button> */}
         </div>
       </section>
 
@@ -66,7 +66,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="mt-32 border-t border-slate-700 py-6 text-center text-sm text-slate-400">
+      <footer className="mt-32 border-t border-surface-border py-6 text-center text-sm text-text-muted">
         © {new Date().getFullYear()} AI Interviewer. Built for practice, not
         pressure.
       </footer>
@@ -78,12 +78,20 @@ type FeatureCardProps = {
   title: string;
   description: string;
 };
-
 const FeatureCard = ({ title, description }: FeatureCardProps) => {
   return (
-    <div className="rounded-xl border border-slate-700 bg-slate-800/50 p-6 hover:border-indigo-500 transition">
+    <div
+      className="
+      rounded-xl
+      border border-surface-border
+      bg-surface-card
+      p-6
+      transition
+      hover:border-brand-primary
+    "
+    >
       <h4 className="text-lg font-semibold">{title}</h4>
-      <p className="mt-2 text-sm text-slate-300">{description}</p>
+      <p className="mt-2 text-sm text-text-secondary">{description}</p>
     </div>
   );
 };

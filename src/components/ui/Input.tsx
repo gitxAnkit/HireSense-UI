@@ -1,117 +1,22 @@
-import type {
-  InputHTMLAttributes,
-  SelectHTMLAttributes,
-  ReactNode,
-} from "react";
-import { cn } from "../../utils/cn";
+import * as React from "react"
 
-/* ---------- Shared ---------- */
+import { cn } from "@/lib/utils"
 
-interface BaseInputProps {
-  label?: string;
-  error?: string;
-  className?: string;
-}
+const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
+  ({ className, type, ...props }, ref) => {
+    return (
+      <input
+        type={type}
+        className={cn(
+          "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          className
+        )}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
+)
+Input.displayName = "Input"
 
-const baseStyles =
-  "w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 " +
-  "placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500";
-
-/* ---------- Text Input ---------- */
-
-interface TextInputProps
-  extends BaseInputProps,
-    InputHTMLAttributes<HTMLInputElement> {}
-
-const TextInput = ({ label, error, className, ...props }: TextInputProps) => (
-  <div className="space-y-1">
-    {label && (
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
-    )}
-
-    <input
-      {...props}
-      className={cn(
-        baseStyles,
-        error && "border-red-500 focus:ring-red-500 focus:border-red-500",
-        className
-      )}
-    />
-
-    {error && <p className="text-xs text-red-600">{error}</p>}
-  </div>
-);
-
-/* ---------- Select Input ---------- */
-
-interface SelectInputProps
-  extends BaseInputProps,
-    SelectHTMLAttributes<HTMLSelectElement> {
-  children: ReactNode;
-}
-
-const SelectInput = ({
-  label,
-  error,
-  className,
-  children,
-  ...props
-}: SelectInputProps) => (
-  <div className="space-y-1">
-    {label && (
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
-    )}
-
-    <select
-      {...props}
-      className={cn(
-        baseStyles,
-        "pr-8",
-        error && "border-red-500 focus:ring-red-500 focus:border-red-500",
-        className
-      )}
-    >
-      {children}
-    </select>
-
-    {error && <p className="text-xs text-red-600">{error}</p>}
-  </div>
-);
-
-/* ---------- File Input ---------- */
-
-interface FileInputProps
-  extends BaseInputProps,
-    InputHTMLAttributes<HTMLInputElement> {}
-
-const FileInput = ({ label, error, className, ...props }: FileInputProps) => (
-  <div className="space-y-1">
-    {label && (
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
-    )}
-
-    <input
-      type="file"
-      {...props}
-      className={cn(
-        "w-full text-sm text-gray-700 file:mr-4 file:rounded-md file:border-0 " +
-          "file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-medium " +
-          "file:text-blue-700 hover:file:bg-blue-100 cursor-pointer",
-        error && "text-red-600",
-        className
-      )}
-    />
-
-    {error && <p className="text-xs text-red-600">{error}</p>}
-  </div>
-);
-
-/* ---------- Export Pattern ---------- */
-
-export const Input = {
-  Text: TextInput,
-  Select: SelectInput,
-  File: FileInput,
-};
-
-export default Input;
+export { Input }
