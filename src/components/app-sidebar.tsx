@@ -3,11 +3,11 @@ import {
   LayoutDashboard,
   MessageSquare,
   User,
-  Video,
   FileText,
-  // Settings,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { type RootState } from "../store";
 
 import {
   Sidebar,
@@ -20,47 +20,55 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-// Menu items
-const items = [
-  {
-    title: "Admin Dashboard",
-    url: "/dashboard-admin",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "User Dashboard",
-    url: "/dashboard-user",
-    icon: Home,
-  },
-  {
-    title: "Jobs",
-    url: "/jobs",
-    icon: FileText,
-  },
-  {
-    title: "Interview Room",
-    url: "/interview",
-    icon: Video,
-  },
-  {
-    title: "Feedback",
-    url: "/feedback",
-    icon: MessageSquare,
-  },
-  {
-    title: "Profile",
-    url: "/profile",
-    icon: User,
-  },
-  // {
-  //   title: "Settings",
-  //   url: "#",
-  //   icon: Settings,
-  // },
-];
-
 export function AppSidebar() {
   const location = useLocation();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const role = user?.role;
+
+  // Candidate Menu
+  const candidateItems = [
+    {
+      title: "Dashboard",
+      url: "/candidate/dashboard",
+      icon: Home,
+    },
+    {
+      title: "Profile",
+      url: "/profile",
+      icon: User,
+    },
+  ];
+
+  // Interviewer Menu
+  const interviewerItems = [
+    {
+      title: "Dashboard",
+      url: "/interviewer/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Jobs",
+      url: "/interviewer/jobs",
+      icon: FileText,
+    },
+    {
+      title: "Feedback",
+      url: "/interviewer/feedback",
+      icon: MessageSquare,
+    },
+    {
+      title: "Profile",
+      url: "/profile",
+      icon: User,
+    },
+  ];
+
+  const items =
+    role === "candidate"
+      ? candidateItems
+      : role === "interviewer"
+      ? interviewerItems
+      : [];
 
   return (
     <Sidebar className="bg-slate-900 text-gray-100">

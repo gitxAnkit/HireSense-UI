@@ -1,33 +1,37 @@
-import { Button } from "@/components/ui/button";
-import JobList from "../components/JobList";
 import { useState } from "react";
 import CreateJob from "../components/CreateJob";
+import JobList from "../components/JobList";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
-const Jobs: React.FC = () => {
-  const [open, setOpen] = useState(false);
+const Jobs = () => {
+  const [isAddJobModalOpen, setAddJobModalOpen] = useState(false);
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Add Job</Button>
+      <Card className="mx-auto max-w-5xl">
+        {/* Header */}
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-xl font-semibold">Jobs</CardTitle>
 
-      <JobList />
+          <Button onClick={() => setAddJobModalOpen(true)} className="gap-2">
+            <Plus className="h-4 w-4" />
+            Add Job
+          </Button>
+        </CardHeader>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Create Job</DialogTitle>
-          </DialogHeader>
+        {/* Content */}
+        <CardContent className="space-y-6">
+          <JobList />
+        </CardContent>
+      </Card>
 
-          <CreateJob onClose={() => setOpen(false)} />
-        </DialogContent>
-      </Dialog>
+      {/* Modal */}
+      {isAddJobModalOpen && (
+        <CreateJob onClose={() => setAddJobModalOpen(false)} />
+      )}
     </>
   );
 };

@@ -8,7 +8,7 @@ import { Outlet } from "react-router-dom";
 
 export default function Layout() {
   return (
-    <SidebarProvider className="bg-background-primary text-text-primary">
+    <SidebarProvider className="bg-gray-200 text-gray-900">
       <AppSidebar />
       <SidebarInset className="flex flex-1 flex-col">
         <SidebarTrigger />
