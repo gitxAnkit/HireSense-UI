@@ -1,14 +1,16 @@
-import { Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { type RootState } from '../store';
-import { type UserRole } from '../store/slices/authSlice';
+import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { type RootState } from "../store";
+import { type UserRole } from "../store/slices/authSlice";
 
 interface ProtectedRouteProps {
   allowedRoles?: UserRole[];
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, user } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   if (!isAuthenticated || !user) {
     return <Navigate to="/login" replace />;
@@ -16,10 +18,10 @@ const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     // Redirect to appropriate dashboard if role is not allowed
-    if (user.role === 'candidate') {
+    if (user.role === "candidate") {
       return <Navigate to="/candidate/dashboard" replace />;
     } else {
-      return <Navigate to="/interviewer/dashboard" replace />;
+      return <Navigate to="/recruiter/dashboard" replace />;
     }
   }
 

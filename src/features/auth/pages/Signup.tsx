@@ -36,7 +36,7 @@ const Signup = () => {
     if (role === "candidate") {
       navigate("/candidate/dashboard");
     } else {
-      navigate("/interviewer/dashboard");
+      navigate("/recruiter/dashboard");
     }
   };
 
@@ -98,13 +98,13 @@ const Signup = () => {
                   </Button>
                   <Button
                     className={`cursor-pointer px-4 py-2 border rounded-md ${
-                      role === "interviewer"
+                      role === "recruiter"
                         ? "bg-primary text-primary-foreground"
                         : ""
                     }`}
-                    onClick={() => setRole("interviewer")}
+                    onClick={() => setRole("recruiter")}
                   >
-                    Interviewer
+                    Recruiter
                   </Button>
                 </div>
               </div>

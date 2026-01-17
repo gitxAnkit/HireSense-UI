@@ -33,45 +33,45 @@ export function AppSidebar() {
       icon: Home,
     },
     {
-      title: "Profile",
-      url: "/profile",
-      icon: User,
-    },
-  ];
-
-  // Interviewer Menu
-  const interviewerItems = [
-    {
-      title: "Dashboard",
-      url: "/interviewer/dashboard",
-      icon: LayoutDashboard,
-    },
-    {
-      title: "Jobs",
-      url: "/interviewer/jobs",
+      title: "Job Listing",
+      url: "/candidate/jobs",
       icon: FileText,
     },
     {
-      title: "Feedback",
-      url: "/interviewer/feedback",
+      title: "Applications",
+      url: "/candidate/applications",
       icon: MessageSquare,
     },
+  ];
+
+  // Recruiter Menu
+  const recruiterItems = [
     {
-      title: "Profile",
-      url: "/profile",
-      icon: User,
+      title: "Dashboard",
+      url: "/recruiter/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      title: "Job Listing",
+      url: "/recruiter/jobs",
+      icon: FileText,
+    },
+    {
+      title: "Applications",
+      url: "/recruiter/applications",
+      icon: MessageSquare,
     },
   ];
 
   const items =
     role === "candidate"
       ? candidateItems
-      : role === "interviewer"
-      ? interviewerItems
+      : role === "recruiter"
+      ? recruiterItems
       : [];
 
   return (
-    <Sidebar className="bg-slate-900 text-gray-100">
+    <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>HireSense</SidebarGroupLabel>
@@ -83,7 +83,11 @@ export function AppSidebar() {
 
                 return (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isActive}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
+                    >
                       <Link to={item.url}>
                         <item.icon />
                         <span>{item.title}</span>

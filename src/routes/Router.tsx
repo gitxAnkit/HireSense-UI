@@ -5,17 +5,18 @@ import Login from "../features/auth/pages/Login";
 import Signup from "../features/auth/pages/Signup";
 import ProtectedRoute from "./ProtectedRoute";
 
-// Candidate Pages
-import CandidateDashboard from "../features/candidate/pages/Dashboard";
-import InterviewDetails from "../features/candidate/pages/InterviewDetails";
-import InterviewRoom from "../features/candidate/pages/InterviewRoom"; // Assuming this file exists/moved
+// Dashboard
+import CandidateDashboard from "../features/Dashboard/pages/CandidateDashboard";
+import RecruiterDashboard from "../features/Dashboard/pages/RecruiterDashboard";
 
-// Interviewer Pages
-import InterviewerDashboard from "../features/interviewer/pages/Dashboard";
-// import Jobs from "../features/interviewer/pages/Jobs";
-import Feedback from "../features/interviewer/pages/Feedback";
-import Profile from "../features/Profile/Profile"; // Keep Profile here for now
-import Jobs from "@/features/jobs/pages/Jobs";
+// Applications
+import Applications from "../features/Applications/pages/Applications";
+import InterviewDetails from "../features/Applications/pages/InterviewDetails";
+import InterviewRoom from "../features/Applications/pages/InterviewRoom";
+import Feedback from "../features/Applications/pages/Feedback";
+
+// Jobs
+import Jobs from "@/features/JobListing/pages/Jobs";
 
 const Router = () => {
   return (
@@ -29,32 +30,24 @@ const Router = () => {
       <Route element={<Layout />}>
         {/* Candidate Routes */}
         <Route
-          element={
-            <ProtectedRoute allowedRoles={["candidate", "interviewer"]} />
-          }
+          element={<ProtectedRoute allowedRoles={["candidate", "recruiter"]} />}
         >
           <Route path="/candidate/dashboard" element={<CandidateDashboard />} />
+          <Route path="/candidate/jobs" element={<Jobs />} />
+          <Route path="/candidate/applications" element={<Applications />} />
           <Route
             path="/candidate/interview/:id"
             element={<InterviewDetails />}
           />
           <Route path="/candidate/room/:id" element={<InterviewRoom />} />
-          {/* Add more candidate routes here */}
         </Route>
 
-        {/* Interviewer Routes */}
-        <Route element={<ProtectedRoute allowedRoles={["interviewer"]} />}>
-          <Route
-            path="/interviewer/dashboard"
-            element={<InterviewerDashboard />}
-          />
-          <Route path="/interviewer/jobs" element={<Jobs />} />
-          <Route path="/interviewer/feedback" element={<Feedback />} />
-        </Route>
-
-        {/* Shared or Other Routes */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/profile" element={<Profile />} />
+        {/* Recruiter Routes */}
+        <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
+          <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+          <Route path="/recruiter/jobs" element={<Jobs />} />
+          <Route path="/recruiter/applications" element={<Applications />} />
+          <Route path="/recruiter/feedback" element={<Feedback />} />
         </Route>
       </Route>
 

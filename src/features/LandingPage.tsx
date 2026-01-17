@@ -14,7 +14,7 @@ const LandingPage = () => {
       if (user.role === "candidate") {
         navigate("/candidate/dashboard");
       } else {
-        navigate("/interviewer/dashboard");
+        navigate("/recruiter/dashboard");
       }
     } else {
       navigate("/login");

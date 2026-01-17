@@ -24,11 +24,11 @@ const Login = () => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const interviewerUser = {
+    const recruiterUser = {
       id: "1",
-      name: "Interviewer",
-      email: "interviewer@gmail.com",
-      role: "interviewer" as UserRole,
+      name: "Recruiter",
+      email: "recruiter@gmail.com",
+      role: "recruiter" as UserRole,
       password: "password",
     };
 
@@ -41,13 +41,13 @@ const Login = () => {
     };
 
     // Check credentials matching the selected role or just credentials
-    if (role === "interviewer") {
+    if (role === "recruiter") {
       if (
-        email === interviewerUser.email &&
-        password === interviewerUser.password
+        email === recruiterUser.email &&
+        password === recruiterUser.password
       ) {
-        dispatch(login(interviewerUser));
-        navigate("/interviewer/dashboard");
+        dispatch(login(recruiterUser));
+        navigate("/recruiter/dashboard");
         return;
       }
     } else {
@@ -68,7 +68,7 @@ const Login = () => {
     // Let's stick to strict matching to be "fixed".
     // If they fail, alert?
     alert(
-      "Invalid credentials. Use candidate@gmail.com / password or interviewer@gmail.com / password"
+      "Invalid credentials. Use candidate@gmail.com / password or recruiter@gmail.com / password"
     );
   };
 
@@ -125,11 +125,11 @@ const Login = () => {
                   </Button>
                   <Button
                     className={`cursor-pointer px-4 py-2 border rounded-md ${
-                      role === "interviewer" ? "bg-blue-300 text-gray-700" : ""
+                      role === "recruiter" ? "bg-blue-300 text-gray-700" : ""
                     }`}
-                    onClick={() => setRole("interviewer")}
+                    onClick={() => setRole("recruiter")}
                   >
-                    Interviewer
+                    Recruiter
                   </Button>
                 </div>
               </div>
