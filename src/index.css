@@ -54,7 +54,7 @@
     --background: hsl(222 47% 4%);          /* #020617 - Darkest blue/black */
     --foreground: hsl(210 40% 98%);         /* #f8fafc - Almost white */
 
-    --card: hsl(217 33% 17%);               /* #1e293b - Dark blue/gray */
+    --card: hsl(222 47% 4%);              /* #1e293b - Dark blue/gray */
     --card-foreground: hsl(210 40% 98%);
 
     --popover: hsl(222 47% 4%);             /* Same as bg or slightly lighter */
@@ -83,7 +83,7 @@
     --ring: hsl(260 85% 65%);
 
     /* Sidebar - keeping it consistent with dark mode */
-    --sidebar: hsl(222 47% 4%);             /* #020617 */
+    --sidebar: hsl(217 33% 17%);             /* #1e293b - same as card */
     --sidebar-foreground: hsl(210 40% 98%);
     --sidebar-primary: hsl(260 85% 65%);
     --sidebar-primary-foreground: hsl(0 0% 100%);

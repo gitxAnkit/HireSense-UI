@@ -1,10 +1,4 @@
-import {
-  Home,
-  LayoutDashboard,
-  MessageSquare,
-  User,
-  FileText,
-} from "lucide-react";
+import { Home, LayoutDashboard, MessageSquare, FileText } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { type RootState } from "../store";

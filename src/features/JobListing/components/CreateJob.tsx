@@ -38,7 +38,7 @@ Requirements:
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
-      <Card className="w-full bg-gray-700 max-h-[90vh] max-w-2xl overflow-y-auto animate-in fade-in zoom-in-95">
+      <Card className="w-full max-h-[90vh] max-w-2xl overflow-y-auto animate-in fade-in zoom-in-95">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Create Job</CardTitle>
         </CardHeader>
