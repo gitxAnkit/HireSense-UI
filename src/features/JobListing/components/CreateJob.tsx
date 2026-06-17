@@ -3,6 +3,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 import {
   Select,
@@ -11,14 +13,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addJobListing } from "@/api/jobs";
+import type { CreateJobPayload, JobStatus } from "../types";
 
 type CreateJobProps = {
   onClose: () => void;
 };
 
 const CreateJob: React.FC<CreateJobProps> = ({ onClose }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const [jdMode, setJdMode] = useState<"upload" | "ai">("upload");
   const [jobDescription, setJobDescription] = useState("");
+
+  const [title, setTitle] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [skills, setSkills] = useState("");
+  const [location, setLocation] = useState("");
+  const [salaryMin, setSalaryMin] = useState("");
+  const [salaryMax, setSalaryMax] = useState("");
+  const [experienceRequired, setExperienceRequired] = useState("");
+  const [expiryDate, setExpiryDate] = useState("");
+  const [status, setStatus] = useState<JobStatus>("open");
+  const [interviewDuration, setInterviewDuration] = useState("30");
 
   const handleGenerateJD = () => {
     // Stub — replace with real AI call later
@@ -36,6 +53,34 @@ Requirements:
     );
   };
 
+  const queryClient = useQueryClient();
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: addJobListing,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["jobs"],
+      });
+      onClose();
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const payload: CreateJobPayload = {
+      title,
+      description: jobDescription,
+      location,
+      salary_min: Number(salaryMin) || 0,
+      salary_max: Number(salaryMax) || 0,
+      experience_required: Number(experienceRequired) || 0,
+      status,
+      expiry_date: expiryDate ? new Date(expiryDate).toISOString() : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      company_id: 1, // Fallback company_id
+      created_by: user?.id ? parseInt(user.id) || 1 : 1, // Parse recruiter user id or default to 1
+    };
+    mutate(payload);
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
       <Card className="w-full max-h-[90vh] max-w-2xl overflow-y-auto animate-in fade-in zoom-in-95">
@@ -44,44 +89,109 @@ Requirements:
         </CardHeader>
 
         <CardContent>
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Job Meta */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+              <div className="space-y-2 col-span-2">
                 <label className="text-sm font-medium">Job Title</label>
-                <Input placeholder="Frontend Developer" />
+                <Input
+                  placeholder="Enter Job Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Company Name</label>
-                <Input placeholder="Acme Corp" />
+                <Input
+                  placeholder="Enter Company Name"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Skills</label>
-                <Input placeholder="React, TypeScript, Tailwind" />
+                <Input
+                  placeholder="Add your skills"
+                  value={skills}
+                  onChange={(e) => setSkills(e.target.value)}
+                />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Location</label>
-                <Input placeholder="Bangalore / Remote" />
+                <Input
+                  placeholder="Enter job location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Salary</label>
-                <Input placeholder="₹6–8 LPA" />
+                <label className="text-sm font-medium">Experience Required (Years)</label>
+                <Input
+                  type="number"
+                  placeholder="e.g. 2"
+                  value={experienceRequired}
+                  onChange={(e) => setExperienceRequired(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Min Salary</label>
+                <Input
+                  type="number"
+                  placeholder="Min Salary (e.g. 600000)"
+                  value={salaryMin}
+                  onChange={(e) => setSalaryMin(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Max Salary</label>
+                <Input
+                  type="number"
+                  placeholder="Max Salary (e.g. 800000)"
+                  value={salaryMax}
+                  onChange={(e) => setSalaryMax(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">Expiry Date</label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Job Status</label>
+                <Select value={status} onValueChange={(val: JobStatus) => setStatus(val)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="open">Open</SelectItem>
+                    <SelectItem value="closed">Closed</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             {/* Interview Duration */}
             <div className="space-y-2">
               <label className="text-sm font-medium">Interview Duration</label>
-              <Select>
+              <Select value={interviewDuration} onValueChange={setInterviewDuration}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select duration" />
                 </SelectTrigger>
@@ -152,12 +262,20 @@ Requirements:
               )}
             </div>
 
+            {isError && (
+              <div className="text-sm text-red-500 font-medium bg-red-500/10 border border-red-500/20 p-3 rounded-md animate-in fade-in duration-200">
+                Error creating job: {error instanceof Error ? error.message : "An error occurred"}
+              </div>
+            )}
+
             {/* Actions */}
             <div className="flex justify-end gap-2 pt-4">
-              <Button variant="ghost" type="button" onClick={onClose}>
+              <Button variant="ghost" type="button" onClick={onClose} disabled={isPending}>
                 Cancel
               </Button>
-              <Button type="submit">Create Job</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Creating..." : "Create Job"}
+              </Button>
             </div>
           </form>
         </CardContent>

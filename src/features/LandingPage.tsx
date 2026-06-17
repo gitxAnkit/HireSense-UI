@@ -45,13 +45,13 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="mt-20 flex flex-col items-center justify-center px-6 text-center">
-        <h2 className="max-w-3xl text-4xl font-bold leading-tight md:text-5xl">
+      <section className="mt-8 flex flex-col items-center justify-center px-6 text-center">
+        <h2 className="max-w-4xl text-4xl font-bold leading-tight md:text-5xl">
           Setup Interviews with an{" "}
           <span className="text-brand-primary">AI-Powered Interviewer</span>
         </h2>
 
-        <p className="mt-6 max-w-2xl text-text-secondary">
+        <p className="mt-3 max-w-2xl text-text-secondary">
           Upload a job description, get role-specific interview questions,
           answer via voice or text, and receive instant AI feedback.
         </p>
@@ -70,7 +70,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="mt-28 px-8">
+      <section className="mt-12 px-8">
         <h3 className="text-center text-2xl font-semibold">
           Why Use AI Interviewer?
         </h3>
@@ -92,7 +92,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="mt-32 border-t border-surface-border py-6 text-center text-sm text-text-muted">
+      <footer className="mt-10 border-t border-surface-border py-6 text-center text-sm text-text-muted">
         © {new Date().getFullYear()} AI Interviewer. Built for practice, not
         pressure.
       </footer>
