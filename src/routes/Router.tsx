@@ -17,6 +17,7 @@ import Feedback from "../features/Applications/pages/Feedback";
 
 // Jobs
 import Jobs from "@/features/JobListing/pages/Jobs";
+import NewJobForm from "@/features/JobListing/pages/NewJobForm";
 
 const Router = () => {
   return (
@@ -46,6 +47,7 @@ const Router = () => {
         <Route element={<ProtectedRoute allowedRoles={["recruiter"]} />}>
           <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
           <Route path="/recruiter/jobs" element={<Jobs />} />
+          <Route path="/recruiter/jobs/new" element={<NewJobForm />} />
           <Route path="/recruiter/applications" element={<Applications />} />
           <Route path="/recruiter/feedback" element={<Feedback />} />
         </Route>

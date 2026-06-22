@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,17 +8,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Card, { CardContent } from "@/components/ui/card";
-// import { useEffect, useState } from "react";
 import { getJobs } from "@/api/jobs";
 import type { Job } from "../types";
 import { useQuery } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+
+const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
 const JobList: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const { data: jobs, isLoading, error } = useQuery({
     queryKey: ["jobs"],
     queryFn: getJobs,
-  })
+  });
+  console.log(jobs, "Jobs data");
 
   const capitalize = (str: string) => {
     if (!str) return "";
@@ -87,6 +93,21 @@ const JobList: React.FC = () => {
     }
   };
 
+  // ── Pagination logic ─────────────────────────────────────────
+  const totalItems = jobs?.length ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const startIdx = (safePage - 1) * pageSize;
+  const endIdx = Math.min(startIdx + pageSize, totalItems);
+  const paginatedJobs = jobs?.slice(startIdx, endIdx) ?? [];
+
+  const goTo = (p: number) => setPage(Math.max(1, Math.min(p, totalPages)));
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setPage(1);
+  };
+
   return (
     <Card className="border-none">
       <CardContent className="p-0">
@@ -127,9 +148,9 @@ const JobList: React.FC = () => {
                   </TableCell>
                 </TableRow>
               ) : (
-                jobs?.map((job: Job, index: number) => (
+                paginatedJobs.map((job: Job, index: number) => (
                   <TableRow key={job.id} className="hover:bg-gray-800 transition-colors">
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{startIdx + index + 1}</TableCell>
                     <TableCell className="font-semibold text-white">{job.title}</TableCell>
                     <TableCell>{job.companyName}</TableCell>
                     <TableCell>
@@ -165,6 +186,105 @@ const JobList: React.FC = () => {
             </TableBody>
           </Table>
         </div>
+
+        {/* ── Pagination Bar ───────────────────────────────────── */}
+        {!isLoading && !error && totalItems > 0 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 border-t border-gray-800">
+            {/* Info + page size */}
+            <div className="flex items-center gap-3 text-sm text-gray-400">
+              <span>
+                Showing <span className="font-medium text-white">{startIdx + 1}–{endIdx}</span> of{" "}
+                <span className="font-medium text-white">{totalItems}</span> jobs
+              </span>
+              <span className="hidden sm:block text-gray-700">|</span>
+              <div className="hidden sm:flex items-center gap-1.5">
+                <span className="text-xs text-gray-500">Rows per page:</span>
+                {PAGE_SIZE_OPTIONS.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => handlePageSizeChange(size)}
+                    className={`h-6 min-w-[28px] rounded px-1.5 text-xs font-medium transition-colors ${
+                      pageSize === size
+                        ? "bg-indigo-600 text-white"
+                        : "text-gray-400 hover:bg-gray-700 hover:text-white"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Page controls */}
+            <div className="flex items-center gap-1">
+              {/* First */}
+              <button
+                onClick={() => goTo(1)}
+                disabled={safePage === 1}
+                className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-700 hover:text-white disabled:pointer-events-none disabled:opacity-30"
+                aria-label="First page"
+              >
+                <ChevronsLeft className="h-4 w-4" />
+              </button>
+              {/* Prev */}
+              <button
+                onClick={() => goTo(safePage - 1)}
+                disabled={safePage === 1}
+                className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-700 hover:text-white disabled:pointer-events-none disabled:opacity-30"
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+
+              {/* Page number pills */}
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((p) => p === 1 || p === totalPages || Math.abs(p - safePage) <= 1)
+                .reduce<(number | "…")[]>((acc, p, idx, arr) => {
+                  if (idx > 0 && p - (arr[idx - 1] as number) > 1) acc.push("…");
+                  acc.push(p);
+                  return acc;
+                }, [])
+                .map((p, i) =>
+                  p === "…" ? (
+                    <span key={`ellipsis-${i}`} className="flex h-8 w-6 items-center justify-center text-xs text-gray-600">
+                      …
+                    </span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => goTo(p as number)}
+                      className={`flex h-8 min-w-[32px] items-center justify-center rounded-md px-2 text-xs font-medium transition-colors ${
+                        safePage === p
+                          ? "bg-indigo-600 text-white"
+                          : "text-gray-400 hover:bg-gray-700 hover:text-white"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+              {/* Next */}
+              <button
+                onClick={() => goTo(safePage + 1)}
+                disabled={safePage === totalPages}
+                className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-700 hover:text-white disabled:pointer-events-none disabled:opacity-30"
+                aria-label="Next page"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+              {/* Last */}
+              <button
+                onClick={() => goTo(totalPages)}
+                disabled={safePage === totalPages}
+                className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-colors hover:bg-gray-700 hover:text-white disabled:pointer-events-none disabled:opacity-30"
+                aria-label="Last page"
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
